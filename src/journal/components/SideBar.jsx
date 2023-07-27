@@ -1,3 +1,4 @@
+import { TurnedInNot } from "@mui/icons-material";
 import {
   Box,
   Divider,
@@ -11,25 +12,25 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { TurnedInNot } from "@mui/icons-material";
+import React from "react";
 import { useSelector } from "react-redux";
-import { SideBarItem } from "./";
+import { SideBarItem } from "./SideBarItem";
 
-export const SideBar = ({ drawerWidth = 240 }) => {
+export const SideBar = ({ drawerwidth = 240 }) => {
   const { displayName } = useSelector((state) => state.auth);
   const { notes } = useSelector((state) => state.journal);
 
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      sx={{ width: { sm: drawerwidth }, flexShrink: { sm: 0 } }}
     >
       <Drawer
-        variant="permanent" // temporary
+        variant="permanent" //temporary
         open
         sx={{
           display: { xs: "block" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerwidth },
         }}
       >
         <Toolbar>

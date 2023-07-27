@@ -1,22 +1,19 @@
-import { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.css";
 import {
   DeleteOutline,
   SaveOutlined,
   UploadOutlined,
 } from "@mui/icons-material";
-import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
-import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.css";
-
-import { useForm } from "../../hooks/useForm";
 import { ImageGallery } from "../components";
+import { useForm } from "../../hooks/useForm";
 import {
   setActiveNote,
-  startDeletingNote,
+  starUploadingFiles,
   startSaveNote,
-  startUploadingFiles,
 } from "../../store/journal";
 
 export const NoteView = () => {
@@ -26,23 +23,20 @@ export const NoteView = () => {
     messageSaved,
     isSaving,
   } = useSelector((state) => state.journal);
-
-  const { body, title, date, onInputChange, formState } = useForm(note);
+  const { body, title, onInputChange, formState, date } = useForm(note);
 
   const dateString = useMemo(() => {
-    const newDate = new Date(date);
-    return newDate.toUTCString();
+    const fecha = new Date(date);
+    return fecha.toUTCString();
   }, [date]);
 
   const fileInputRef = useRef();
-
   useEffect(() => {
     dispatch(setActiveNote(formState));
   }, [formState]);
-
   useEffect(() => {
     if (messageSaved.length > 0) {
-      Swal.fire("Nota actualizada", messageSaved, "success");
+      Swal.fire("Nota Actualizada", messageSaved, "success");
     }
   }, [messageSaved]);
 
@@ -52,21 +46,21 @@ export const NoteView = () => {
 
   const onFileInputChange = ({ target }) => {
     if (target.files === 0) return;
-    dispatch(startUploadingFiles(target.files));
+
+    dispatch(starUploadingFiles(target.files));
   };
 
   const onDelete = () => {
     dispatch(startDeletingNote());
   };
-
   return (
     <Grid
+      className="animate__animated animate__fadeIn animate__faster"
       container
       direction="row"
       justifyContent="space-between"
       alignItems="center"
       sx={{ mb: 1 }}
-      className="animate__animated animate__fadeIn animate__faster"
     >
       <Grid item>
         <Typography fontSize={39} fontWeight="light">
@@ -75,13 +69,12 @@ export const NoteView = () => {
       </Grid>
       <Grid item>
         <input
+          ref={fileInputRef}
           type="file"
           multiple
-          ref={fileInputRef}
           onChange={onFileInputChange}
           style={{ display: "none" }}
         />
-
         <IconButton
           color="primary"
           disabled={isSaving}
@@ -89,7 +82,6 @@ export const NoteView = () => {
         >
           <UploadOutlined />
         </IconButton>
-
         <Button
           disabled={isSaving}
           onClick={onSaveNote}

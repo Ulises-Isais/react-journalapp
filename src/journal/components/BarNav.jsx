@@ -1,8 +1,7 @@
+import { useDispatch } from "react-redux";
 import { LogoutOutlined, MenuOutlined } from "@mui/icons-material";
 import { AppBar, Grid, IconButton, Toolbar, Typography } from "@mui/material";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { startLogout } from "../../store/auth/thunks";
+import { startLogout } from "../../store/auth";
 
 export const BarNav = ({ drawerWidth = 240 }) => {
   const dispatch = useDispatch();

@@ -1,45 +1,42 @@
 import { collection, deleteDoc, doc, setDoc } from "firebase/firestore/lite";
 import { FireBaseDB } from "../../firebase/config";
-import { addNewEmptyNote, setActiveNote } from "./";
 import {
+  addNewEmptyNote,
   deleteNoteById,
   savingNewNote,
+  setActiveNote,
   setNotes,
   setPhotosToActiveNote,
   setSaving,
   updateNote,
 } from "./journalSlice";
-import { fileUpload, loadNotes } from "../../helpers";
+import { loadNotes } from "../../helpers/loadNotes";
+import { fileUpload } from "../../helpers/fileUpload";
 
 export const startNewNote = () => {
   return async (dispatch, getState) => {
+    //Todo Tarea
     dispatch(savingNewNote());
-
     const { uid } = getState().auth;
-
+    //uid
     const newNote = {
       title: "",
       body: "",
       date: new Date().getTime(),
       imageUrls: [],
     };
-
     const newDoc = doc(collection(FireBaseDB, `${uid}/journal/notes`));
     await setDoc(newDoc, newNote);
 
     newNote.id = newDoc.id;
-
-    //! dispatch
     dispatch(addNewEmptyNote(newNote));
     dispatch(setActiveNote(newNote));
   };
 };
-
 export const startLoadingNotes = () => {
   return async (dispatch, getState) => {
     const { uid } = getState().auth;
     if (!uid) throw new Error("El UID del usuario no existe");
-
     const notes = await loadNotes(uid);
     dispatch(setNotes(notes));
   };
@@ -62,7 +59,7 @@ export const startSaveNote = () => {
   };
 };
 
-export const startUploadingFiles = (files = []) => {
+export const starUploadingFiles = (files = []) => {
   return async (dispatch) => {
     dispatch(setSaving());
 

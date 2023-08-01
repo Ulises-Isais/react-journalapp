@@ -1,5 +1,6 @@
 export const fileUpload = async (file) => {
-  if (!file) throw new Error("No hay ningun archivo a subir");
+  // if (!file) throw new Error("No hay ningun archivo a subir");
+  if (!file) return null;
   const cloudUrl = "https://api.cloudinary.com/v1_1/react-ulih/upload";
   const formData = new FormData();
   formData.append("upload_preset", "react-08journal");
@@ -12,10 +13,11 @@ export const fileUpload = async (file) => {
     });
     if (!resp.ok) throw new Error("No se pudo subir la imagen");
 
-    const cloudResp = await resp.json().secure_url;
-    return cloudResp;
+    const cloudResp = await resp.json();
+    return cloudResp.secure_url;
   } catch (error) {
-    console.log(error);
-    throw new Error(error.message);
+    // console.log(error);
+    // throw new Error(error.message);
+    return null;
   }
 };

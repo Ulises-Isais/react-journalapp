@@ -39,13 +39,14 @@ export const startCreatingUser = ({ email, password, displayName }) => {
 export const starLoginWithEmail = ({ email, password }) => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
-    const respuesta = await loginWithEmail({
-      email,
-      password,
-    });
-    if (!respuesta.ok) return dispatch(logout(respuesta));
+    const { ok, uid, errorMessage, displayName, photoURL } =
+      await loginWithEmail({
+        email,
+        password,
+      });
+    if (!ok) return dispatch(logout(errorMessage));
 
-    dispatch(login({ uid, displayName }));
+    dispatch(login({ uid, displayName, ok, email, photoURL }));
   };
 };
 
